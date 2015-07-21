@@ -1,0 +1,46 @@
+<form method="post" action="/polls/nameajax/">
+{% csrf_token %}
+First name:<br>
+<input type="text" id="fn" name="fname">
+<br>
+Last name:<br>
+<input type="text"  id="ln" name="lname">
+<br>
+<button type="button" onclick="myFunction()">Submit</button>
+</form>
+<br>
+
+<p id="demo"></p>
+
+<script>
+var xmlhttp;
+
+function loadXMLDoc(url,cfunc)
+{
+if (window.XMLHttpRequest)
+  {
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=cfunc;
+xmlhttp.open("POST",url,true);
+xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+xmlhttp.send("fname="+document.getElementById('fn').value+"&lname="+document.getElementById('ln').value+"&csrfmiddlewaretoken="+document.getElementsByName('csrfmiddlewaretoken')[0].value);
+}
+
+function myFunction()
+{
+loadXMLDoc("/polls/nameajax/",function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("demo").innerHTML=xmlhttp.responseText;
+    var res = JSON.parse(xmlhttp.responseText);
+    alert(res.name);
+    }
+  });
+}
+</script>

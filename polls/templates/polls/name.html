@@ -1,0 +1,14 @@
+<form method="post" action="/polls/name/">
+{% csrf_token %}
+First name:<br>
+<input type="text" id="fn" name="fname">
+<br>
+Last name:<br>
+<input type="text"  id="ln" name="lname">
+<br>
+<input type="submit" name="submit" value="Submit">
+</form>
+<br>
+<p id="demo">
+{% if name  %}<strong>{{ name }}</strong>{% endif %}
+</p>

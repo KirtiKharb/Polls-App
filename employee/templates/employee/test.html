@@ -1,0 +1,263 @@
+Algorithm: reverse(head, k)
+1) Reverse the first sub-list of size k. While reversing keep track of the next node and previous node. Let the pointer to the next node be next and pointer to the previous node be prev. See this post for reversing a linked list.
+2) head->next = reverse(next, k) /* Recursively call for rest of the list and link the two sub-lists */
+3) return prev /* prev becomes the new head of the list (see the diagrams of iterative method of this post) */
+
+#include<stdio.h>
+#include<stdlib.h>
+
+/* Link list node */
+struct node
+{
+    int data;
+    struct node* next;
+};
+
+/* Reverses the linked list in groups of size k and returns the
+   pointer to the new head node. */
+struct node *reverse (struct node *head, int k)
+{
+    struct node* current = head;
+    struct node* next = NULL;
+    struct node* prev = NULL;
+    int count = 0;
+
+    /*reverse first k nodes of the linked list */
+    while (current != NULL && count < k)
+    {
+       next  = current->next;
+       current->next = prev;
+       prev = current;
+       current = next;
+       count++;
+    }
+
+    /* next is now a pointer to (k+1)th node
+       Recursively call for the list starting from current.
+       And make rest of the list as next of first node */
+    if(next !=  NULL)
+    {  head->next = reverse(next, k); }
+
+    /* prev is new head of the input list */
+    return prev;
+}
+
+/* UTILITY FUNCTIONS */
+/* Function to push a node */
+void push(struct node** head_ref, int new_data)
+{
+    /* allocate node */
+    struct node* new_node =
+            (struct node*) malloc(sizeof(struct node));
+
+    /* put in the data  */
+    new_node->data  = new_data;
+
+    /* link the old list off the new node */
+    new_node->next = (*head_ref);
+
+    /* move the head to point to the new node */
+    (*head_ref)    = new_node;
+}
+
+/* Function to print linked list */
+void printList(struct node *node)
+{
+    while(node != NULL)
+    {
+        printf("%d  ", node->data);
+        node = node->next;
+    }
+}
+
+/* Drier program to test above function*/
+int main(void)
+{
+    /* Start with the empty list */
+    struct node* head = NULL;
+
+     /* Created Linked list is 1->2->3->4->5->6->7->8 */
+     push(&head, 8);
+     push(&head, 7);
+     push(&head, 6);
+     push(&head, 5);
+     push(&head, 4);
+     push(&head, 3);
+     push(&head, 2);
+     push(&head, 1);
+
+     printf("\n Given linked list \n");
+     printList(head);
+     head = reverse(head, 3);
+
+     printf("\n Reversed Linked list \n");
+     printList(head);
+
+     getchar();
+     return(0);
+}
+Run on IDE
+
+struct node * _kAltReverse(struct node *node, int k, bool b)
+{
+   if(node == NULL)
+       return NULL;
+
+   int count = 1;
+   struct node *prev = NULL;
+   struct node  *current = node;
+   struct node *next;
+
+   /* The loop serves two purposes
+      1) If b is true, then it reverses the k nodes
+      2) If b is false, then it moves the current pointer */
+   while(current != NULL && count <= k)
+   {
+       next = current->next;
+
+       /* Reverse the nodes only if b is true*/
+       if(b == true)
+          current->next = prev;
+
+       prev = current;
+       current = next;
+       count++;
+   }
+
+   /* 3) If b is true, then node is the kth node.
+       So attach rest of the list after node.
+     4) After attaching, return the new head */
+   if(b == true)
+   {
+        node->next = _kAltReverse(current,k,!b);
+        return prev;
+   }
+
+   /* If b is not true, then attach rest of the list after prev.
+     So attach rest of the list after prev */
+   else
+   {
+        prev->next = _kAltReverse(current, k, !b);
+        return node;
+   }
+}
+
+void reverseList(struct node **headref);
+void _delLesserNodes(struct node *head);
+
+/* Deletes nodes which have a node with greater value node
+  on left side */
+void delLesserNodes(struct node **head_ref)
+{
+    /* 1) Reverse the linked list */
+    reverseList(head_ref);
+
+    /* 2) In the reversed list, delete nodes which have a node
+       with greater value node on left side. Note that head
+       node is never deleted because it is the leftmost node.*/
+    _delLesserNodes(*head_ref);
+
+    /* 3) Reverse the linked list again to retain the
+       original order */
+    reverseList(head_ref);
+}
+
+/* Deletes nodes which have greater value node(s) on left side */
+void _delLesserNodes(struct node *head)
+{
+     struct node *current = head;
+
+     /* Initialize max */
+     struct node *maxnode = head;
+     struct node *temp;
+
+     while (current != NULL && current->next != NULL)
+     {
+         /* If current is smaller than max, then delete current */
+         if(current->next->data < maxnode->data)
+         {
+             temp = current->next;
+             current->next = temp->next;
+             free(temp);
+         }
+
+         /* If current is greater than max, then update max and
+            move current */
+         else
+         {
+             current = current->next;
+             maxnode = current;
+         }
+
+     }
+}
+
+/* Utility function to insert a node at the begining */
+void push(struct node **head_ref, int new_data)
+{
+     struct node *new_node =
+              (struct node *)malloc(sizeof(struct node));
+     new_node->data = new_data;
+     new_node->next = *head_ref;
+     *head_ref = new_node;
+}
+
+/* Utility function to reverse a linked list */
+void reverseList(struct node **headref)
+{
+     struct node *current = *headref;
+     struct node *prev = NULL;
+     struct node *next;
+     while(current != NULL)
+     {
+          next = current->next;
+          current->next = prev;
+          prev = current;
+          current = next;
+     }
+     *headref = prev;
+}
+
+/* Utility function to print a linked list */
+void printList(struct node *head)
+{
+     while(head!=NULL)
+     {
+        printf("%d ",head->data);
+        head=head->next;
+     }
+     printf("\n");
+}
+
+/* Driver program to test above functions */
+int main()
+{
+    struct node *head = NULL;
+
+    /* Create following linked list
+      12->15->10->11->5->6->2->3 */
+    push(&head,3);
+    push(&head,2);
+    push(&head,6);
+    push(&head,5);
+    push(&head,11);
+    push(&head,10);
+    push(&head,15);
+    push(&head,12);
+
+    printf("Given Linked List: ");
+    printList(head);
+
+    delLesserNodes(&head);
+
+    printf("\nModified Linked List: ");
+    printList(head);
+
+    getchar();
+    return 0;
+}
+Run on IDE
+Output:
+
+Given Linked List: 12 15 10 11 5 6 2 3
+Modified Linked List: 15 11 6 3

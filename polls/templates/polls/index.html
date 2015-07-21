@@ -1,0 +1,66 @@
+{% extends "polls/base.html" %}
+
+{% block content %}
+
+<div class="container" >
+<div class="panel panel-primary">
+<div class="panel-heading">
+    <h2>Polls:</h2>
+</div>
+<div class="panel-body">
+
+<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">
+  Add new question
+</button>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Fill question and its choices</h4>
+      </div>
+      <div class="modal-body">
+        <form class ='box' action='/polls/addquestion/' method='post' id='addQ-form' name='addQ-form' >
+             {% csrf_token %}
+              <label ><b>Enter the Question:</b></label><br>
+              <input required='required' type='text' id='questiontext' name='questiontext' placeholder='question'><br><br>
+              <p><label for='choice#'><b>Enter three Choices:</b></label><br>
+              <input required='required' type='text' id='choice1' name='choice1' placeholder='choice 1'><br><br>
+              <input required='required' type='text' id='choice2' name='choice2' placeholder='choice 2'><br><br>
+              <input required='required' type='text' id='choice3' name='choice3' placeholder='choice 3'><br><br>
+              </p>
+              <p class='add button'>
+              <input class='btn btn-success' type='submit' value='Submit' id='addQ' name='addQ'/>
+              </p>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% if success %}<p class="text-center">{{ success }}</p> {% endif %}
+
+{% if latest_question_list %}
+    <ul>
+    {% for question in latest_question_list %}
+       <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+<br>
+
+</div>
+<div class="panel-footer">
+    <p class="pull-right"> logged in as <b>{{ username }}.</b></p>
+    <p><a class="text text-danger" href="/polls/logout/"><u>Logout</u></a></p>
+</div>
+</div>
+</div>
+
+{% endblock %}

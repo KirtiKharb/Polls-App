@@ -1,0 +1,12 @@
+<div id="id01"></div>
+
+<script>
+func(ddct);
+
+function func(dct)
+{
+var out = "data : ";
+out += dct.data
+document.getElementById("id01").innerHTML = out;
+}
+</script>

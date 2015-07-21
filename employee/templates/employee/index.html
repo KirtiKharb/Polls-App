@@ -1,0 +1,131 @@
+{% extends "employee/base.html" %}
+{% block external %}
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+{% endblock %}
+{% block content %}
+
+<div class="container" >
+<div class="panel panel-primary">
+<div class="panel-heading">
+    <div class="panel-title"><h2>Employees:</h2></div>
+
+</div>
+<div class="panel-body">
+<div class="btn-group btn-group-justified" role="group" aria-label="buttons">
+   <div class="btn-group" role="group">
+    <button type="button" class="btn btn-default" id="button1" >Show all employees</button>
+  </div>
+  <div class="btn-group" role="group">
+    <button type="button" class="btn btn-default" id="button2"  data-toggle="modal" data-target="#myModal1">Employee code</button>
+  </div>
+  <div class="btn-group" role="group">
+    <button type="button" class="btn btn-default" id="button3"  data-toggle="modal" data-target="#myModal2">N<sup>th</sup> largest salary</button>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Enter employee code</h4>
+      </div>
+      <div class="modal-body">
+        <form class ='box'  >
+             {% csrf_token %}
+              <label><b>Employee code:</b></label><br>
+              <input required='required' type='text' id='emp_code'  name='emp_code' placeholder='Employee code'><br><br>
+              <button class='btn btn-success' type='button' id='button4' data-dismiss="modal">Submit</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Enter value for 'N'</h4>
+      </div>
+      <div class="modal-body">
+        <form class ='box'  >
+             {% csrf_token %}
+              <label><b>N: </b></label><br>
+              <input required='required' type='text' id='n_value'  name='n_value' placeholder='N value'><br><br>
+              <button class='btn btn-success' type='button' id='button5' data-dismiss="modal">Submit</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <table class='table table-striped' id="mytext"></table>
+</div>
+<div class="panel-footer">
+
+</div>
+<script>
+$(document).ready(function(){
+    $("#button1").click(function(){
+        $.get("/employee/show_all/",
+        function(msg){
+             $("#mytext").html('');
+             var data = $.parseJSON(msg);
+             $("#mytext").append("<thead><tr><th>ID</th><th>Employee code</th><th>Name</th><th>Salary</th></tr></thead><tbody>");
+             $.each(data,function(key, record) {
+                    $("#mytext").append("<tr><td>"+key+"</td><td>"+record.fields.emp_code+"</td><td>"+record.fields.emp_name+"</td><td>"+record.fields.salary+"</td></tr>");
+
+                 });
+             $("#mytext").append("</tbody>");
+        });
+    });
+    $("#button4").click(function(){
+        $.get("/employee/show_emp_with_code/",
+        {
+        emp_code: $("#emp_code").val()
+        },
+        function(msg){
+             $("#mytext").html('');
+             var data = $.parseJSON(msg);
+             $("#mytext").append("<thead><tr><th>ID</th><th>Employee code</th><th>Name</th><th>Salary</th></tr></thead><tbody>");
+             $.each(data,function(key, record) {
+                    $("#mytext").append("<tr><td>"+key+"</td><td>"+record.fields.emp_code+"</td><td>"+record.fields.emp_name+"</td><td>"+record.fields.salary+"</td></tr>");
+
+                 });
+             $("#mytext").append("</tbody>");
+        });
+    });
+    $("#button5").click(function(){
+        $.get("/employee/show_emp_with_nthsalary/",
+        {
+        n_value: $("#n_value").val()
+        },
+        function(msg){
+             $("#mytext").html('');
+             var data = $.parseJSON(msg);
+             $("#mytext").append("<thead><tr><th>ID</th><th>Employee code</th><th>Name</th><th>Salary</th></tr></thead><tbody>");
+             $.each(data,function(key, record) {
+                    $("#mytext").append("<tr><td>"+key+"</td><td>"+record.fields.emp_code+"</td><td>"+record.fields.emp_name+"</td><td>"+record.fields.salary+"</td></tr>");
+
+                 });
+             $("#mytext").append("</tbody>");
+        });
+    });
+
+});
+
+
+</script>
+
+</div>
+</div>
+{% endblock %}

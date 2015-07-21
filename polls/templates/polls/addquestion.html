@@ -1,0 +1,38 @@
+<html>
+<head lang="en">
+<meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load staticfiles %}
+<script type="text/javascript" src="{% static "js/jquery-1.11.3.js"  %}"></script>
+<script type="text/javascript" src="{% static "js/jquery.validate.js"  %}"></script>
+<script type="text/javascript" src="{% static "js/additional-methods.js"  %}"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+      $(document).ready(function() {
+          $("#addQ").click(function(){
+              alert("Succesfully added question. Go back to view index");
+          });
+
+      });
+</script>
+</head>
+<body>
+
+<form class ="box" action="/polls/addquestion/" method="post" id="addQ-form" name="addQ-form" >
+   {% csrf_token %}
+<p><label for="questiontext"><b>Enter the Question:</b></label>
+<input required="required" type="text" id="questiontext" name="questiontext" width="800">
+</p>
+<p><label for="choice"><b>Enter three Choices:</b></label><br>
+<input required="required" type="text" id="choice1" name="choice1"><br><br>
+<input required="required" type="text" id="choice2" name="choice2"><br><br>
+<input required="required" type="text" id="choice3" name="choice3"><br><br>
+</p>
+<p class="add button">
+    <input class="btn btn-success" type="submit" value="Add question" id="addQ" name="addQ"/>
+</p>
+<p><a class="link" href="{% url 'polls:index' %}">Back</a></p>
+
+</form>
+</body>
+</html>

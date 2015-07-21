@@ -1,0 +1,31 @@
+{% extends "polls/base.html" %}
+
+{% block content %}
+
+<div class="container" >
+<div class="panel panel-warning">
+<div class="panel-heading">
+    <h1>Login:</h1>
+</div>
+<div class="panel-body">
+<form id="login-form" class ="text-center" action="/polls/login/" method="post" novalidate="novalidate">
+    {% if error %}<p class="text-center"><strong>{{ error }}</strong></p>{% endif %}
+    {% if success %}<p class="text-center"><strong>{{ success }}</strong></p>{% endif %}
+    <br>
+    {% csrf_token %}
+    <label><b>User Name:</b></label> <input type="text" id="un" name="username">
+    <br><br>
+    <label><b>Password :</b></label> <input type="password"  id="ps" name="password">
+    <br><br>
+    <input class="btn btn-success" type="submit" value="Login" name="button" id="button"/>
+    <br><br>
+</form>
+<div class="panel-footer">
+<a href="/polls/signup/"><u>Sign up</u></a></li>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+{% endblock %}

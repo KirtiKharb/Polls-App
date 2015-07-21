@@ -1,0 +1,24 @@
+{% extends "polls/base.html" %}
+
+{% block content %}
+
+<div class="container" >
+<div class="panel panel-success">
+<div class="panel-heading">
+    <h1>{{ question.question_text }}</h1>
+</div>
+<div class="panel-body">
+<ul>
+{% for choice in question.choice_set.all %}
+    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
+{% endfor %}
+</ul>
+</div>
+<div class="panel-footer">
+<a  class="text text-info" href="{% url 'polls:detail' question.id %}"><u>Vote again?</u></a>
+<a class="pull-right text text-primary" href="{% url 'polls:index' %}"><u>Go to index</u></a>
+</div>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends "polls/base.html" %}
+{% block external %}
+<style>label { display: inline-block; width: 140px; text-align: right }</style>
+{% endblock %}
+{% block content %}
+
+
+    <!--
+<script type="text/javascript">
+
+  $(document).ready(function() {
+
+    $("#signup-form").validate({
+
+        rules: {
+            username: {
+                required: true,
+                checkUsername: true,
+                checkAvailability: true
+
+            },
+            password: {
+                required: true,
+                minlength: 8,
+                maxlength: 40,
+                pwckeck: true
+            },
+            email: {
+               required: true,
+               checkEmail: true,
+               registeredEmail: true
+            },
+            phone:{
+                required: true,
+                minlength: 10,
+                phoneIN: true
+            }
+        },
+
+        messages: {
+            username: {
+                required: "Please enter your user name",
+                checkUsername: "User name can have 4-15 characters without any special characters",
+                checkAvailability: "This username is already taken"
+            },
+
+            password: {
+                required: "Please provide a password",
+                minlength: "Your password must be at least {0} characters long",
+                maxlength: "Your password can be at most {0} characters long ",
+                pwckeck: "Password should contain: <li>At least one upper case character <li>At least one lower case character <li>At least one number <li>And at least one special character"
+            },
+
+            email: {
+                required: "Please enter your email",
+                checkEmail: "Please enter valid email",
+                registeredEmail: "This EmailID is already registered"
+            },
+
+            phone:{
+                required: "Please enter your Phone number",
+                phoneIN: "Please enter valid Phone number",
+                minlength: "Your phone number must be at least {0} digits long"
+            }
+
+
+        }
+    });
+
+    $.validator.addMethod("phoneIN",
+           function(value) {
+                   return /^[1-9]{1}[0-9]{9}$/.test(value);
+           },
+            "Please enter a valid phone number."
+    );
+
+      $.validator.addMethod("pwckeck",
+           function(value){
+                   return  /^.*(?=.{8,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&_]).*$/.test(value);
+
+      });
+
+      $.validator.addMethod("checkUsername",
+           function(value){
+                   return  /^[a-zA-Z0-9_-]{4,20}$/.test(value);
+
+      });
+
+
+      $.validator.addMethod("checkEmail",
+           function(value){
+                   return  /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(value);
+
+      });
+
+
+      $.validator.addMethod("checkAvailability",
+           function(value) {
+                $.ajax({
+                  "url": "/polls/isuseravailable/",
+                  "method": "post",
+                  "data": {
+                      username: value,
+                      csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
+                  },
+                  success: function (response) {
+                      if (response == 'True')
+                        return true;
+                      else
+                        return false;
+                  }
+              });
+            });
+
+      $.validator.addMethod("registeredEmail",function(value) {
+              $.ajax({
+                      "url": "/polls/isemailnotregistered/",
+                      "method": "post",
+                      "data" : {
+                           email: value,
+                           csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value
+                      },
+                      success: function (response) {
+                          return response;
+                      }
+              });
+
+      });
+
+
+
+  });
+
+</script>
+-->
+
+
+
+
+<div class="container-fluid animate form" id="register">
+<div class="panel panel-primary">
+<div class="panel-heading">
+    <h3 >Sign up:</h3>
+</div>
+<div class="panel-body">
+<form class ="box" action="/polls/signup/" method="post" id="signup-form" name="signup-form" >
+    {% csrf_token %}
+<div class=" text-center">
+    <label for="username" data-icon="u"><b>User Name:</b></label>
+    <input  required="required" type="text" id="username" name="username" {% if  user_name_error  %}{% else %}value="{{ username }}"{% endif %}>
+</div>
+    <br>{% if user_name_error %}<p>{{ user_name_error }}<br></p>{% endif %}
+<div class=" text-center">
+    <label for="email"  data-icon="e"><b> Email ID:</b></label>
+    <input  required="required" type="email" id="email" name="email" {% if  email_error %}{% else %}value="{{ email }}"{% endif %}>
+</div>
+    <br>{% if email_error %}<p>{{ email_error }}<br></p>{% endif %}
+<div class=" text-center">
+    <label for="phone"  data-icon="phone"><b>Phone No.:</b></label>
+    <input  type="text" id="phone" name="phone" {% if  phone_error %}{% else %}value="{{ phone_no }}"{% endif %}>
+</div>
+    <br>{% if phone_error %}<p>{{ phone_error }}<br></p>{% endif %}
+<div class=" text-center">
+    <label for="password"  data-icon="p"><b>Password :</b></label>
+    <input  type="password"  id="password" name="password" required="required">
+</div>
+    <br>{% if password_error %}<p>{{ password_error }}<br></p>{% endif %}
+<div class="text-center">
+    <input class="btn btn-success col-sm-3-offset-6" type="submit" value="Sign up" id="submit" name="submit"/>
+</div>
+</form>
+</div>
+<div class="panel-footer">
+</div>
+</div>
+</div>
+
+{% endblock %}
+
